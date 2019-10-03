@@ -28,18 +28,32 @@ namespace HRQueensAttackII {
             // check if o is on an atk line
             // adjust max atk as necessary
 
-            int n = 5; // board length
-            int k = 3; // obstacle count
-            int r_q = 4; // Q column Y
-            int c_q = 3; // Q row X
+            int n = 88587; // board length (5)
+            int k = 9; // obstacle count (4)
+            int r_q = 20001; // Q column Y (4)
+            int c_q = 20003; // Q row X (3)
 
             int[][] obstacles = new int[k][];
-            int[] o1 = { 5, 5 };
-            int[] o2 = { 4, 2 };
-            int[] o3 = { 2, 3 };
+            int[] o1 = { 20001, 20002 }; //5,5
+            int[] o2 = { 20001, 20004 }; //4,2
+            int[] o3 = { 20000, 20003 }; //2,3
+            int[] o4 = { 20002, 20003 }; //4,1
+            int[] o5 = { 20000, 20004 };
+            int[] o6 = { 20000, 20002 };
+            int[] o7 = { 20002, 20004 };
+            int[] o8 = { 20002, 20002 };
+            int[] o9 = { 564, 323 };
             obstacles[0] = o1;
             obstacles[1] = o2;
             obstacles[2] = o3;
+            obstacles[3] = o4;
+            obstacles[4] = o5;
+            obstacles[5] = o6;
+            obstacles[6] = o7;
+            obstacles[7] = o8;
+            obstacles[8] = o9;           
+
+            //expect 0
 
 
             /*
@@ -93,35 +107,35 @@ namespace HRQueensAttackII {
             IEnumerable<int[]> atkLinObs = obstacles.Where(o => o[0] == r_q || o[1] == c_q || Math.Abs(c_q - o[1]) == Math.Abs(r_q - o[0]));
 
             // splitting by cardinal directions
-            IEnumerable<int[]> obsN = obstacles.Where(o => o[1] == c_q && o[1] - c_q > 0).; // obs on same column && north of queen
-            IEnumerable<int[]> obsS = obstacles.Where(o => o[1] == c_q && o[1] - c_q < 0);
-            IEnumerable<int[]> obsE = obstacles.Where(o => o[0] == r_q && o[0] - r_q > 0);
-            IEnumerable<int[]> obsW = obstacles.Where(o => o[0] == r_q && o[0] - r_q < 0);
+            IEnumerable<int[]> obsN = atkLinObs.Where(o => o[1] == c_q && o[0] - r_q > 0); // obs on same column && north of queen
+            IEnumerable<int[]> obsS = atkLinObs.Where(o => o[1] == c_q && o[0] - r_q < 0);
+            IEnumerable<int[]> obsE = atkLinObs.Where(o => o[0] == r_q && o[1] - c_q > 0);
+            IEnumerable<int[]> obsW = atkLinObs.Where(o => o[0] == r_q && o[1] - c_q < 0);
+                             
+            IEnumerable<int[]> obsNE = atkLinObs.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[0] - c_q > 0 && o[1] - r_q > 0); // obs on diagonal line && N && E
+            IEnumerable<int[]> obsSE = atkLinObs.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[0] - c_q < 0 && o[1] - r_q > 0);
+            IEnumerable<int[]> obsNW = atkLinObs.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[0] - c_q > 0 && o[1] - r_q < 0);
+            IEnumerable<int[]> obsSW = atkLinObs.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[0] - c_q < 0 && o[1] - r_q < 0);           
 
-            IEnumerable<int[]> obsNE = obstacles.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[1] - c_q > 0 && o[0] - r_q > 0); // obs on diagonal line && N && E
-            IEnumerable<int[]> obsSE = obstacles.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[1] - c_q < 0 && o[0] - r_q > 0);
-            IEnumerable<int[]> obsNW = obstacles.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[1] - c_q > 0 && o[0] - r_q < 0);
-            IEnumerable<int[]> obsSW = obstacles.Where(o => Math.Abs(c_q - x) == Math.Abs(r_q - y) && o[1] - c_q < 0 && o[0] - r_q < 0);
-
-            var trueN = obsN.OrderBy(o => Math.Abs(o[1] - c_q)).First(); // get the closest obstacle for each direction
-            var trueS = obsN.OrderBy(o => Math.Abs(o[1] - c_q)).First();
-            var trueE = obsN.OrderBy(o => Math.Abs(o[0] - r_q)).First();
-            var trueW = obsN.OrderBy(o => Math.Abs(o[0] - r_q)).First();
-            var trueNE = obsNE.OrderBy(o => Math.Abs(o[1] - c_q)).First();
-            var trueSE = obsSE.OrderBy(o => Math.Abs(o[1] - c_q)).First();
-            var trueNW = obsNW.OrderBy(o => Math.Abs(o[0] - c_q)).First();
-            var trueSW = obsSW.OrderBy(o => Math.Abs(o[0] - c_q)).First();
+            int[] trueN = obsN.OrderBy(o => Math.Abs(o[0] - c_q)).FirstOrDefault(); // get the closest obstacle for each direction
+            int[] trueS = obsS.OrderBy(o => Math.Abs(o[0] - c_q)).FirstOrDefault();
+            int[] trueE = obsE.OrderBy(o => Math.Abs(o[1] - r_q)).FirstOrDefault();
+            int[] trueW = obsW.OrderBy(o => Math.Abs(o[1] - r_q)).FirstOrDefault();
+            int[] trueNE = obsNE.OrderBy(o => Math.Abs(o[0] - c_q)).FirstOrDefault();
+            int[] trueSE = obsSE.OrderBy(o => Math.Abs(o[0] - c_q)).FirstOrDefault();
+            int[] trueNW = obsNW.OrderBy(o => Math.Abs(o[1] - c_q)).FirstOrDefault();
+            int[] trueSW = obsSW.OrderBy(o => Math.Abs(o[1] - c_q)).FirstOrDefault();
 
             List<int[]> trueObs = new List<int[]>();
-            trueObs.Add(trueN);
-            trueObs.Add(trueS);
-            trueObs.Add(trueE);
-            trueObs.Add(trueW);
-            trueObs.Add(trueNE);
-            trueObs.Add(trueSE);
-            trueObs.Add(trueNW);
-            trueObs.Add(trueSW);
-
+            if (trueN != null) { trueObs.Add(trueN); }
+            if (trueS != null) { trueObs.Add(trueS); }
+            if (trueE != null) { trueObs.Add(trueE); }
+            if (trueW != null) { trueObs.Add(trueW); }
+            if (trueNE != null) { trueObs.Add(trueNE); }
+            if (trueSE != null) { trueObs.Add(trueSE); }
+            if (trueNW != null) { trueObs.Add(trueNW); }
+            if (trueSW != null) { trueObs.Add(trueSW); }
+      
             foreach (var o in trueObs) {
                 y = o[0]; // row r_q
                 x = o[1]; // column c_q
