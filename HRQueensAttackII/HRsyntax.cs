@@ -14,10 +14,9 @@
     int maxAtk = N + NE + E + SE + S + SW + W + NW;
     */
 
-
+     
     // alternative to calculate maximum atk using four straight lines 
 
-    // for values of n > 1
     int centerAtk = (n - 1) * 4; 
     // calculates the maximum atk squares if Q is centered, -1 because we can't count the queen's square.
     // * 4 because that counts the Vertial, Horizontal, Positive Diagonal, and Negative Diagonal attack lines, in both directions
